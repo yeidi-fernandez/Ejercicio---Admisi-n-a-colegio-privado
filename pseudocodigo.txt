@@ -1,0 +1,102 @@
+INICIO
+  Definir COSTO_ANUAL = 18.000.000
+  // Cada dato se vuelve a pedir si no es válido
+
+  // Capturar la información del aspirante
+  Pedir nombre
+  Pedir edad
+  Pedir grado
+  Pedir nombre del acudiente
+  Pedir tipo de familia
+  Pedir estado civil de los padres
+  Pedir cantidad de aportantes económicos
+
+  ingreso_familiar = 0
+  Para i desde 1 hasta cantidad de aportantes
+      Pedir ingreso del aportante i
+      ingreso_familiar = ingreso_familiar + ingreso
+  Fin Para
+
+  Pedir gastos mensuales
+  Preguntar si la vivienda es propia
+  Pedir cantidad de hermanos
+  Pedir promedio académico
+  Preguntar si tuvo observaciones disciplinarias
+
+  // Calcular capacidad económica
+  excedente_mensual = ingreso_familiar - gastos
+  excedente_anual = excedente_mensual * 12
+
+  // Calcular puntaje económico
+  Asignar puntos según el excedente anual
+  Si la vivienda es propia
+      sumar 10 puntos
+  Fin Si
+  Si hay 2 o más aportantes
+      sumar 10 puntos
+  Fin Si
+
+  // Calcular puntaje familiar
+  Asignar puntos según el tipo de familia
+  Asignar puntos según el estado civil
+  Si tiene al menos un hermano
+      sumar 5 puntos
+  Fin Si
+
+  // Calcular puntaje académico
+  Asignar puntos según el promedio
+  Si no tuvo observaciones disciplinarias
+      sumar 5 puntos
+  Fin Si
+
+  // Calcular puntaje total
+  puntaje_total = puntaje_economico + puntaje_familiar + puntaje_academico
+
+  // Calcular descuento
+  descuento = hermanos * 10
+  Si descuento es mayor a 25
+      descuento = 25
+  Fin Si
+  costo_con_descuento = COSTO_ANUAL - (COSTO_ANUAL * descuento / 100)
+
+  // Tomar decisión
+  beca_otorgada = 0
+  costo_final = costo_con_descuento
+
+  Si puntaje_total >= 70 Entonces
+      Si excedente_anual >= costo_con_descuento Entonces
+          decision = "ADMITIDO"
+      Sino
+          Para cada beca en 20 %, 35 % y 50 %
+              costo_con_beca = costo_con_descuento - (costo_con_descuento * beca / 100)
+              Si excedente_anual >= costo_con_beca Entonces
+                  beca_otorgada = beca
+                  costo_final = costo_con_beca
+                  decision = "ADMITIDO CON BECA PARCIAL"
+                  salir del ciclo
+              Fin Si
+          Fin Para
+          Si beca_otorgada = 0 Entonces
+              decision = "LISTA DE ESPERA POR CAPACIDAD DE PAGO"
+          Fin Si
+      Fin Si
+  Sino Si puntaje_total >= 50 Entonces
+      decision = "LISTA DE ESPERA"
+  Sino
+      decision = "NO ADMITIDO"
+  Fin Si
+
+  pension_mensual = costo_final / 12
+
+  Mostrar:
+      Datos del aspirante
+      Para cada criterio
+          mostrar sus puntos
+      Fin Para
+      Puntajes obtenidos
+      Descuento aplicado
+      Beca otorgada (si aplica)
+      Costo final
+      Pensión mensual
+      Decisión final y justificación
+FIN
